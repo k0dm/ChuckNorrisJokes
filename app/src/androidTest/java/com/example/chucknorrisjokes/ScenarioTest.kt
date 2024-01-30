@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 class ScenarioTest {
 
     @get:Rule
-    private val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
+    var activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun successResponse(){
@@ -23,7 +23,7 @@ class ScenarioTest {
         initialPage.checkVisible()
         initialPage.clickGetJoke()
 
-        initialPage = InitialPage("The signs outside of Chuck Norris' properties all say \\\"TRESPASSERS WILL BE NORRISED\\\"")
+        initialPage = InitialPage("The signs outside of Chuck Norris' properties all say \"TRESPASSERS WILL BE NORRISED\"")
         initialPage.checkVisible()
     }
 
