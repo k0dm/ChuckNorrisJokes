@@ -11,5 +11,5 @@ class ChuckNorrisJokesApp : Application(), ProvideViewModel {
         factory = ProvideViewModel.Factory()
     }
 
-    override fun <T> viewModel(clazz: Class<out T>) = factory.viewModel(clazz)
+    override fun <T: Representative<*>> viewModel(clazz: Class<out T>) = factory.viewModel(clazz)
 }

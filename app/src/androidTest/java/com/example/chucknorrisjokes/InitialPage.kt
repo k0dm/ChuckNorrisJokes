@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasTextColor
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -29,11 +30,11 @@ class InitialPage(private val joke: String = "") : AbstractPage() {
 
         mainTextView
             .check(isCompletelyBelow(withId(R.id.imageView)))
+            .check(matches(hasTextColor(R.color.black)))
             .check(matches(withText(joke)))
 
         jokeButton
             .check(isCompletelyBelow(withId(R.id.mainTextView)))
-            .check(matches(TextColorMatcher(R.color.white)))
 
     }
 }

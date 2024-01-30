@@ -7,12 +7,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import com.example.chucknorrisjokes.presentation.MainActivity
-import com.example.chucknorrisjokes.core.RunAsync
+import com.example.chucknorrisjokes.data.JokesRepository
 import com.example.chucknorrisjokes.presentation.UiStateObservable
 import com.example.chucknorrisjokes.presentation.UiStateObserver
 import com.example.chucknorrisjokes.domain.LoadResult
-import com.example.chucknorrisjokes.data.Repository
+import com.example.chucknorrisjokes.presentation.MainViewModel
+import com.example.chucknorrisjokes.core.RunAsync
 
 class MainViewModelUnitTest {
 
@@ -28,7 +28,7 @@ class MainViewModelUnitTest {
         runAsync = FakeRunAsync(order)
         uiStateObservable = FakeObservable(order)
         repository = FakeRepository(order, true)
-        mainViewModel = MainViewModel.Base(runAsync, uiStateObservable)
+        mainViewModel = MainViewModel.Base(runAsync, uiStateObservable, repository)
     }
 
     @Test
@@ -53,9 +53,13 @@ class MainViewModelUnitTest {
         )
 
         runAsync.pingResult()
-        uiStateObservable.checkUiState(UiState.Initial("Chuck Norris is the world's most popular loner."))
+        uiStateObservable.checkUiState(UiState.Initial(joke = "Chuck Norris is the world's most popular loner."))
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
             RUN_ASYNC_UI,
             OBSERVABLE_UPDATE
         )
@@ -64,16 +68,31 @@ class MainViewModelUnitTest {
         mainViewModel.loadJoke()
         uiStateObservable.checkUiState(UiState.Loading)
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE, RUN_ASYNC_UI, OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
+            RUN_ASYNC_UI,
+            OBSERVABLE_UPDATE,
             OBSERVABLE_UPDATE,
             RUN_ASYNC_BACKGROUND,
             REPOSITORY_JOKE
         )
 
         runAsync.pingResult()
-        uiStateObservable.checkUiState(UiState.Initial("The signs outside of Chuck Norris' properties all say \\\"TRESPASSERS WILL BE NORRISED\\\""))
+        uiStateObservable.checkUiState(UiState.Initial(joke = "The signs outside of Chuck Norris' properties all say \"TRESPASSERS WILL BE NORRISED\""))
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE, RUN_ASYNC_UI, OBSERVABLE_UPDATE, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
+            RUN_ASYNC_UI,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
             RUN_ASYNC_UI,
             OBSERVABLE_UPDATE
         )
@@ -81,7 +100,7 @@ class MainViewModelUnitTest {
     }
 
     @Test
-    fun successResponseAfterFailed(){
+    fun successResponseAfterFailed() {
         mainViewModel.init(true)
         uiStateObservable.checkUiState(UiState.Initial())
         order.check(OBSERVABLE_UPDATE)
@@ -102,9 +121,13 @@ class MainViewModelUnitTest {
         )
 
         runAsync.pingResult()
-        uiStateObservable.checkUiState(UiState.Initial("Chuck Norris is the world's most popular loner."))
+        uiStateObservable.checkUiState(UiState.Initial(joke = "Chuck Norris is the world's most popular loner."))
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
             RUN_ASYNC_UI,
             OBSERVABLE_UPDATE
         )
@@ -115,16 +138,31 @@ class MainViewModelUnitTest {
         mainViewModel.loadJoke()
         uiStateObservable.checkUiState(UiState.Loading)
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE, RUN_ASYNC_UI, OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
+            RUN_ASYNC_UI,
+            OBSERVABLE_UPDATE,
             OBSERVABLE_UPDATE,
             RUN_ASYNC_BACKGROUND,
             REPOSITORY_JOKE
         )
 
         runAsync.pingResult()
-        uiStateObservable.checkUiState(UiState.Error("Server unavailable. Please try later."))
+        uiStateObservable.checkUiState(UiState.Error(message = "Server unavailable. Please try later."))
         order.check(
-            OBSERVABLE_UPDATE, OBSERVABLE_UPDATE_OBSERVER, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE, RUN_ASYNC_UI, OBSERVABLE_UPDATE, OBSERVABLE_UPDATE, RUN_ASYNC_BACKGROUND, REPOSITORY_JOKE,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE_OBSERVER,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
+            RUN_ASYNC_UI,
+            OBSERVABLE_UPDATE,
+            OBSERVABLE_UPDATE,
+            RUN_ASYNC_BACKGROUND,
+            REPOSITORY_JOKE,
             RUN_ASYNC_UI,
             OBSERVABLE_UPDATE
         )
@@ -200,7 +238,7 @@ class MainViewModelUnitTest {
     private class FakeRepository(
         private val order: Order,
         private var isSuccessResponse: Boolean
-    ) : Repository {
+    ) : JokesRepository {
 
         private val jokes = listOf(
             "Chuck Norris is the world's most popular loner.",
@@ -213,7 +251,7 @@ class MainViewModelUnitTest {
             return if (isSuccessResponse) {
                 LoadResult.Success(joke = jokes[(index++) % jokes.size])
             } else {
-                LoasResult.Error(message = "Server unavailable. Please try later.")
+                LoadResult.Error(message = "Server unavailable. Please try later.")
             }
         }
 
