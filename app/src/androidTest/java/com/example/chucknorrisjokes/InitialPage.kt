@@ -28,11 +28,11 @@ class InitialPage(private val joke: String = "") : AbstractPage() {
         ).check(isCompletelyBelow(R.id.titleTextView))
 
         mainTextView
-            .check(isCompletelyBelow(R.id.imageView))
+            .check(isCompletelyBelow(withId(R.id.imageView)))
             .check(matches(withText(joke)))
 
         jokeButton
-            .check(isCompletelyBelow(R.id.mainTextView))
+            .check(isCompletelyBelow(withId(R.id.mainTextView)))
             .check(matches(TextColorMatcher(R.color.white)))
 
     }
