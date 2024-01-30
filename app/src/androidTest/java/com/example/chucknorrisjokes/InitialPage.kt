@@ -25,7 +25,7 @@ class InitialPage(private val joke: String = "") : AbstractPage() {
                 withParent(withId(rootId)),
                 withParent(isAssignableFrom(LinearLayout::class.java)),
             )
-        ).check(isCompletelyBelow(R.id.titleTextView))
+        ).check(isCompletelyBelow(withId(R.id.titleTextView)))
 
         mainTextView
             .check(isCompletelyBelow(withId(R.id.imageView)))

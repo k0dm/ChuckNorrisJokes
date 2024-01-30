@@ -3,7 +3,7 @@ package com.example.chucknorrisjokes
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -15,7 +15,7 @@ abstract class AbstractPage() {
 
     protected val rootId = R.id.contentLayout
 
-    protected val titleTextView = Espresso.onView(
+    protected val titleTextView = onView(
         allOf(
             withId(R.id.titleTextView),
             withText("Chuck Norris Jokes"),
@@ -25,7 +25,7 @@ abstract class AbstractPage() {
         )
     )
 
-    protected val mainTextView = Espresso.onView(
+    protected val mainTextView = onView(
         allOf(
             withId(R.id.mainTextView),
             isAssignableFrom(TextView::class.java),
@@ -34,7 +34,7 @@ abstract class AbstractPage() {
         )
     )
 
-    protected val jokeButton = Espresso.onView(
+    protected val jokeButton = onView(
         allOf(
             withId(R.id.jokeButton),
             isAssignableFrom(Button::class.java),

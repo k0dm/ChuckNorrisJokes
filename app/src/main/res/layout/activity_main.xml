@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="32dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:layout_marginHorizontal="32dp"
     tools:context=".presentation.MainActivity">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -18,12 +20,12 @@
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/mainImageView"
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/chuck_norris"
-        tools:visibility="visible"
-        android:importantForAccessibility="no" />
+        tools:visibility="visible" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBarr"
@@ -31,8 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
-        tools:visibility="gone"
-        app:trackColor="@color/orange" />
+        app:trackColor="@color/orange"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/loadingTextView"
